@@ -1,0 +1,9 @@
+.ldfavorite-button:not(.active) {
+    background-color: #FFF !important;
+    color: #41a0db;
+    border-color: #41a0db;
+    border: 1px solid;
+}
+.ldfavorite-button {
+    outline: none;
+}
