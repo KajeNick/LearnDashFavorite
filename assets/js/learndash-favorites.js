@@ -11,15 +11,15 @@ jQuery(document).ready(function ($) {
                 videoLink: window.location.href
             };
 
-        that.html('<img src="' + ldFavorites.preload + '"/>');
+        that.html('<img src="' + ldFavorites.preload + '" class="ldfavorites-preloader"/>');
 
         $.post(ldFavorites.ajaxurl, data, function (answer) {
             if (answer.success) {
                 that.addClass('active');
-                that.html('In favorite <i class="sf-icon-star-full"></i>');
+                that.html('<i class="sf-icon-love"></i> In favorite');
             } else {
                 that.removeClass('active');
-                that.html('Add to favorite <i class="sf-icon-star-full"></i>');
+                that.html('<i class="sf-icon-love"></i> Add to favorite');
             }
         }, 'json');
     });
@@ -43,9 +43,9 @@ function addButtons() {
             });
 
             if (active) {
-                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + video_title + '" >In favorite <i class="sf-icon-star-full"></i></button>');
+                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i> In favorite</button>');
             } else {
-                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + video_title + '" >Add to favorite <i class="sf-icon-star-full"></i></button>');
+                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i>Add to favorite</button>');
             }
         });
     }

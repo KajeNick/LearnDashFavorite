@@ -42,7 +42,7 @@ class LearnDashFavorites {
 				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
 				'security' => wp_create_nonce( $this->key ),
 				'list'     => $this->getList(),
-				'preload'  => plugins_url( 'assets/img/preload.gif', __FILE__ )
+				'preload'  => plugins_url( 'assets/img/preloader.svgpreloader.svg', __FILE__ )
 			]
 		);
 	}
@@ -103,7 +103,7 @@ class LearnDashFavorites {
 		for ( $i = ( $page - 1 ) * $limit; $i < $page * $limit; $i ++ ) {
 			if ( isset( $list[ $i ] ) ) {
 				$html .= '<div class="ldfavorites-block">';
-				$html .= '<a href="' . $list[ $i ]['videoLink'] . '" target="_blank" >' . $list[ $i ]['videoTitle'] . ' | ' . '</a>';
+				$html .= '<h2><a href="' . $list[ $i ]['videoLink'] . '" target="_blank" >' . $list[ $i ]['videoTitle'] . '</a></h2>';
 				$html .= '<iframe src="' . $list[ $i ]['videoUrl'] . '" frameborder="0" title="' . $list[ $i ]['videoTitle'] . '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 				$html .= '</div>';
 			}

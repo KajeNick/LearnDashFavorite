@@ -1,7 +1,13 @@
 .ldfavorite-button:not(.active) {
     background-color: #FFF !important;
-    color: #41a0db;
-    border-color: #41a0db;
+    color: #dd3333;
+    border-color: #dd3333;
+    border: 1px solid;
+}
+.ldfavorite-button.active {
+    background-color: #dd3333 !important;
+    color: #FFF;
+    border-color: #dd3333;
     border: 1px solid;
 }
 
@@ -10,7 +16,8 @@
 }
 
 .ldfavorites-block {
-    margin-bottom: 25px;
+    margin-bottom: 50px;
+    max-width: 72%;
 }
 
 .ldfavorites-block a {
@@ -43,4 +50,7 @@
 
 .ldfavorites-pagination a:hover:not(.active) {
     background-color: #ddd;
+}
+.ldfavorites-preloader {
+    height: 10px;
 }
