@@ -16,10 +16,10 @@ jQuery(document).ready(function ($) {
         $.post(ldFavorites.ajaxurl, data, function (answer) {
             if (answer.success) {
                 that.addClass('active');
-                that.html('<i class="sf-icon-love"></i> In favorite');
+                that.html('<i class="sf-icon-love"></i> In den Favoriten');
             } else {
                 that.removeClass('active');
-                that.html('<i class="sf-icon-love"></i> Add to favorite');
+                that.html('<i class="sf-icon-love"></i> Zu den Favoriten hinzufügen');
             }
         }, 'json');
     });
@@ -43,9 +43,9 @@ function addButtons() {
             });
 
             if (active) {
-                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i> In favorite</button>');
+                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i> In den Favoriten</button>');
             } else {
-                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i>Add to favorite</button>');
+                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + video_title + '" ><i class="sf-icon-love"></i>Zu den Favoriten hinzufügen</button>');
             }
         });
     }

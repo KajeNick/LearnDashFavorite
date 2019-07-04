@@ -1,6 +1,9 @@
+.ldfavorites-content {
+    max-width: 72%;
+}
 .ldfavorite-button:not(.active) {
-    background-color: #FFF !important;
-    color: #dd3333;
+    background-color: #DD8D8D !important;
+    color: #FFF;
     border-color: #dd3333;
     border: 1px solid;
 }
@@ -17,7 +20,6 @@
 
 .ldfavorites-block {
     margin-bottom: 50px;
-    max-width: 72%;
 }
 
 .ldfavorites-block a {
@@ -33,13 +35,13 @@
 }
 
 .ldfavorites-pagination a {
-    color: black;
     float: left;
     padding: 8px 16px;
     text-decoration: none;
     transition: background-color .3s;
     border: 1px solid #ddd;
     margin: 0 4px;
+    border-radius: 3.7px;
 }
 
 .ldfavorites-pagination a.active {
@@ -56,7 +58,7 @@
 }
 @media screen and (max-width: 480px) {
 
-    .ldfavorites-block {
+    .ldfavorites-content {
         max-width: 100% !important;
     }
 

@@ -173,7 +173,7 @@ class LearnDashFavorites {
 
 		$list = $this->get_list();
 
-		$html = '';
+		$html = '<div class="ldfavorites-content">';
 		for ( $i = ( $page - 1 ) * $this->limit; $i < $page * $this->limit; $i ++ ) {
 			if ( isset( $list[ $i ] ) ) {
 				$html .= '<div class="ldfavorites-block">';
@@ -196,6 +196,7 @@ class LearnDashFavorites {
 		}
 
 		$html .= $this->make_pagination( $page, ceil( count( $list ) / $this->limit ) );
+		$html .= '</div>';
 
 		echo $html;
 	}
@@ -244,7 +245,7 @@ class LearnDashFavorites {
 			if ( $val['order'] == $order ) {
 				$neighborKey = $asc == 0 ? $key - 1 : $key + 1;
 				if ( isset( $list[ $neighborKey ] ) ) {
-					$list[ $key ]['order'] = $list[ $neighborKey ]['order'];
+					$list[ $key ]['order']         = $list[ $neighborKey ]['order'];
 					$list[ $neighborKey ]['order'] = $order;
 				}
 			}
