@@ -6,7 +6,9 @@ jQuery(document).ready(function ($) {
             data = {
                 action: 'add_favorite',
                 security: ldFavorites.security,
-                videoUrl: that.data('video_url')
+                videoUrl: that.data('video_url'),
+                videoTitle: that.data('video_title'),
+                videoLink: window.location.href
             };
 
         that.html('<img src="' + ldFavorites.preload + '"/>');
@@ -29,19 +31,21 @@ jQuery(document).ready(function ($) {
 function addButtons() {
     if ($('.tve_responsive_video_container').length) {
         $('.tve_responsive_video_container').each(function () {
-            let video_url = $(this).parent().data('url'),
+            let that = $(this),
+                video_url = that.find('iframe').data('src'),
+                video_title = that.closest('.thrv_responsive_video').prev().find('h2 span').html(),
                 active = false;
 
-            $.each(ldFavorites.list, function(index, value) {
+            $.each(ldFavorites.list, function (index, value) {
                 if (value.videoUrl == video_url) {
                     active = true;
                 }
             });
 
-            if(active) {
-                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" >In favorite <i class="sf-icon-star-full"></i></button>');
+            if (active) {
+                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + video_title + '" >In favorite <i class="sf-icon-star-full"></i></button>');
             } else {
-                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" >Add to favorite <i class="sf-icon-star-full"></i></button>');
+                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + video_title + '" >Add to favorite <i class="sf-icon-star-full"></i></button>');
             }
         });
     }

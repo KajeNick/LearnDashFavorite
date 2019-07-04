@@ -4,6 +4,43 @@
     border-color: #41a0db;
     border: 1px solid;
 }
+
 .ldfavorite-button {
     outline: none;
+}
+
+.ldfavorites-block {
+    margin-bottom: 25px;
+}
+
+.ldfavorites-block a {
+
+}
+
+.center {
+    text-align: center;
+}
+
+.ldfavorites-pagination {
+    display: inline-block;
+}
+
+.ldfavorites-pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+}
+
+.ldfavorites-pagination a.active {
+    background-color: #047ccc;
+    color: white;
+    border: 1px solid #047ccc;
+}
+
+.ldfavorites-pagination a:hover:not(.active) {
+    background-color: #ddd;
 }
