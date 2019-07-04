@@ -11,109 +11,203 @@ License: A "Slug" license name e.g. GPL3
 
 class LearnDashFavorites {
 
+	/**
+	 * Plugin version
+	 *
+	 * @var string
+	 */
 	public $version = '1.0.1';
-	private $wpdb;
+
+	/**
+	 * Key for use secure ajax call
+	 *
+	 * @var string
+	 */
 	private $key = 'Zjdhe27dha63hGS84';
 
-	public function __construct( $wpdb ) {
-		$this->wpdb = $wpdb;
+	/**
+	 * Post per page for pagination
+	 *
+	 * @var int
+	 */
+	private $limit = 5;
 
+	/**
+	 * LearnDashFavorites constructor.
+	 */
+	public function __construct() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'add_favorite_script' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'add_favorite_styles' ] );
 		add_action( 'wp_ajax_add_favorite', [ $this, 'add_favorite_callback' ] );
 		add_action( 'wp_ajax_nopriv_add_favorite', [ $this, 'add_favorite_callback' ] );
 		add_shortcode( 'ldfavorites_list', [ $this, 'display_favorites_list' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'on_ob_start' ] );
 	}
 
-	public static function init( $wpdb ) {
+	/**
+	 * Initialization
+	 *
+	 * @return bool|LearnDashFavorites
+	 */
+	public static function init() {
 		static $instance = false;
 
 		if ( ! $instance ) {
-			$instance = new LearnDashFavorites( $wpdb );
+			$instance = new LearnDashFavorites();
 		}
 
 		return $instance;
 	}
 
+	/**
+	 * Bufering for redirect
+	 *
+	 * @return void
+	 */
+	function on_ob_start() {
+		ob_start();
+	}
+
+	/**
+	 * Add js scripts
+	 *
+	 * @return void
+	 */
 	function add_favorite_script() {
 		wp_enqueue_script( 'learndash-favorites-js', plugins_url( 'assets/js/learndash-favorites.js', __FILE__ ), array( 'jquery' ), time(), true );
 		wp_localize_script( 'learndash-favorites-js', 'ldFavorites',
 			[
 				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
 				'security' => wp_create_nonce( $this->key ),
-				'list'     => $this->getList(),
-				'preload'  => plugins_url( 'assets/img/preloader.svgpreloader.svg', __FILE__ )
+				'list'     => $this->get_list(),
+				'preload'  => plugins_url( 'assets/img/preloader.svg', __FILE__ )
 			]
 		);
 	}
 
+	/**
+	 * Add styles
+	 *
+	 * @return void
+	 */
 	function add_favorite_styles() {
 		wp_enqueue_style( 'learndash-favorites-css', plugins_url( 'assets/css/learndash-favorites.css', __FILE__ ), null, time(), 'all' );
 	}
 
+	/**
+	 * Callback for ajax calls for add/remove in favorite
+	 *
+	 * @return void
+	 */
 	function add_favorite_callback() {
 		check_ajax_referer( $this->key, 'security' );
 
-		$list = $this->getList();
+		$list = $this->get_list();
 
 		if ( count( $list ) ) {
 			foreach ( $list as $key => $item ) {
 				if ( $item['videoUrl'] == $_POST['videoUrl'] ) {
 					unset( $list[ $key ] );
-					$this->saveList( $list );
+					$this->save_list( $list );
 					wp_die( json_encode( [ 'success' => false ] ) );
 				}
 			}
 		}
 
 		$list[] = [
+			'order'      => count( $list ) ? max( array_column( $list, 'order' ) ) + 1 : 1,
 			'videoUrl'   => sanitize_text_field( $_POST['videoUrl'] ),
 			'videoTitle' => sanitize_text_field( $_POST['videoTitle'] ),
 			'videoLink'  => sanitize_text_field( $_POST['videoLink'] )
 		];
 
-		$this->saveList( $list );
+		$this->save_list( $list );
 
 		wp_die( json_encode( [ 'success' => true ] ) );
 	}
 
-	private function getList() {
+	/**
+	 * Get all favorites from Database
+	 *
+	 * @return array
+	 */
+	private function get_list() {
 		$list = get_option( 'ldfavorites_user' . get_current_user_id() );
 		if ( empty( $list ) ) {
 			return [];
 		}
 
-		return array_values(json_decode( $list, true ));
+		return array_values( json_decode( $list, true ) );
 	}
 
-	private function saveList( $list ) {
+	/**
+	 * Update favorite list in database
+	 *
+	 * @param $list
+	 *
+	 * @return void
+	 */
+	private function save_list( $list ) {
 		if ( ! empty( $list ) ) {
 			$list = json_encode( $list );
 		}
 		update_option( 'ldfavorites_user' . get_current_user_id(), $list );
 	}
 
+	/**
+	 * Favorites page
+	 *
+	 * @param $attr
+	 *
+	 * @return void
+	 */
 	function display_favorites_list( $attr ) {
-		$list = $this->getList();
+		$page = isset( $_GET['ldfpage'] ) && is_numeric( $_GET['ldfpage'] ) ? (int) $_GET['ldfpage'] : 1;
 
-		$limit = 5;
-		$page  = isset( $_GET['ldfpage'] ) && is_numeric( $_GET['ldfpage'] ) ? (int) $_GET['ldfpage'] : 1;
+		if ( isset( $_GET['order'] ) ) {
+			$this->change_order( $_GET['order'], $_GET['asc'] );
+
+			wp_redirect( esc_url( remove_query_arg( [ 'order', 'asc' ] ) ) );
+			exit;
+		}
+
+		$list = $this->get_list();
 
 		$html = '';
-		for ( $i = ( $page - 1 ) * $limit; $i < $page * $limit; $i ++ ) {
+		for ( $i = ( $page - 1 ) * $this->limit; $i < $page * $this->limit; $i ++ ) {
 			if ( isset( $list[ $i ] ) ) {
 				$html .= '<div class="ldfavorites-block">';
-				$html .= '<h2><a href="' . $list[ $i ]['videoLink'] . '" target="_blank" >' . $list[ $i ]['videoTitle'] . '</a></h2>';
+				$html .= '<h2><a href="' . $list[ $i ]['videoLink'] . '" target="_blank" >' . $list[ $i ]['videoTitle'] . '</a>';
+				$html .= '<div class="ldfavorites-arrows">';
+				$html .= '      <a href="' . esc_url( add_query_arg( [
+						'ldfpage' => $page,
+						'order'   => $list[ $i ]['order'],
+						'asc'     => 1
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-bottom.png', __FILE__ ) . '" class="ldfavorites-arrow-bottom" ></a>';
+				$html .= '      <a href="' . esc_url( add_query_arg( [
+						'ldfpage' => $page,
+						'order'   => $list[ $i ]['order'],
+						'asc'     => 0
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-top.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
+				$html .= '</div></h2>';
 				$html .= '<iframe src="' . $list[ $i ]['videoUrl'] . '" frameborder="0" title="' . $list[ $i ]['videoTitle'] . '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 				$html .= '</div>';
 			}
 		}
 
-		$html .= $this->make_pagination( $page, ceil( count( $list ) / $limit ) );
+		$html .= $this->make_pagination( $page, ceil( count( $list ) / $this->limit ) );
 
 		echo $html;
 	}
 
+	/**
+	 * Pagination for favorites page
+	 *
+	 * @param $page
+	 * @param $max
+	 *
+	 * @return string
+	 */
 	private function make_pagination( $page, $max ) {
 		if ( $max <= 1 ) {
 			return '';
@@ -121,7 +215,7 @@ class LearnDashFavorites {
 
 		$html = '<div class="center"><div class="ldfavorites-pagination">';
 		for ( $i = 1; $i <= $max; $i ++ ) {
-			if ($i == $page) {
+			if ( $i == $page ) {
 				$html .= '<a href="#" class="active" >' . $i . '</a>';
 			} else {
 				$html .= '<a href="' . esc_url( add_query_arg( [ 'ldfpage' => $i ] ) ) . '" >' . $i . '</a>';
@@ -131,12 +225,41 @@ class LearnDashFavorites {
 
 		return $html;
 	}
+
+	/**
+	 * Changing order in favorite list
+	 *
+	 * @param $order
+	 * @param $asc
+	 *
+	 * @return void
+	 */
+	private function change_order( $order, $asc ) {
+		$list = $this->get_list();
+		usort( $list, function ( $a, $b ) {
+			return $a['order'] - $b['order'];
+		} );
+
+		foreach ( $list as $key => $val ) {
+			if ( $val['order'] == $order ) {
+				$neighborKey = $asc == 0 ? $key - 1 : $key + 1;
+				if ( isset( $list[ $neighborKey ] ) ) {
+					$list[ $key ]['order'] = $list[ $neighborKey ]['order'];
+					$list[ $neighborKey ]['order'] = $order;
+				}
+			}
+		}
+
+		usort( $list, function ( $a, $b ) {
+			return $a['order'] - $b['order'];
+		} );
+
+		$this->save_list( $list );
+	}
 }
 
 function init_lear_dash_favorites() {
-	global $wpdb;
-
-	return LearnDashFavorites::init( $wpdb );
+	return LearnDashFavorites::init();
 }
 
 init_lear_dash_favorites();

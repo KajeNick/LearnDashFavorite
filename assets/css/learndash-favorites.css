@@ -54,3 +54,20 @@
 .ldfavorites-preloader {
     height: 10px;
 }
+@media screen and (max-width: 480px) {
+
+    .ldfavorites-block {
+        max-width: 100% !important;
+    }
+
+}
+.ldfavorites-arrows {
+    float: right;
+    display: block;
+}
+.ldfavorites-arrow-top {
+
+}
+.ldfavorites-arrow-bottom {
+
+}
