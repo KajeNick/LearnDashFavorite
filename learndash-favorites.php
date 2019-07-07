@@ -263,4 +263,6 @@ function init_lear_dash_favorites() {
 	return LearnDashFavorites::init();
 }
 
-init_lear_dash_favorites();
+if (!isset($_GET['tve'])) {
+	init_lear_dash_favorites();
+}
