@@ -115,10 +115,11 @@ class LearnDashFavorites {
 		}
 
 		$list[] = [
-			'order'      => count( $list ) ? max( array_column( $list, 'order' ) ) + 1 : 1,
-			'videoUrl'   => sanitize_text_field( $_POST['videoUrl'] ),
-			'videoTitle' => sanitize_text_field( $_POST['videoTitle'] ),
-			'videoLink'  => sanitize_text_field( $_POST['videoLink'] )
+			'order'         => count( $list ) ? max( array_column( $list, 'order' ) ) + 1 : 1,
+			'videoUrl'      => sanitize_text_field( $_POST['videoUrl'] ),
+			'videoTitle'    => sanitize_text_field( $_POST['videoTitle'] ),
+			'videoLink'     => sanitize_text_field( $_POST['videoLink'] ),
+			'videoDescript' => sanitize_text_field( $_POST['videoDescript'] )
 		];
 
 		$this->save_list( $list );
@@ -171,6 +172,13 @@ class LearnDashFavorites {
 			exit;
 		}
 
+		if ( isset( $_GET['remove'] ) ) {
+			$this->remove_from_favorite( $_GET['remove'] );
+
+			wp_redirect( esc_url( remove_query_arg( [ 'remove', 'asc' ] ) ) );
+			exit;
+		}
+
 		$list = $this->get_list();
 
 		$html = '<div class="ldfavorites-content">';
@@ -189,7 +197,18 @@ class LearnDashFavorites {
 						'order'   => $list[ $i ]['order'],
 						'asc'     => 0
 					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-top.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
+
+				$html .= '<a href="' . esc_url( add_query_arg( [
+						'ldfpage' => $page,
+						'remove'  => $list[ $i ]['order'],
+						'asc'     => 1
+					] ) ) . '" class="ldfavorites-remove"><img src="' . plugins_url( 'assets/img/delete.png', __FILE__ ) . '" ></a>';
 				$html .= '</div></h2>';
+
+				if ( ! empty( $list[ $i ]['videoDescript'] ) && $list[ $i ]['videoDescript'] != 'undefined' ) {
+					$html .= '<p>' . $list[ $i ]['videoDescript'] . '</p>';
+				}
+
 				$html .= '<iframe src="' . $list[ $i ]['videoUrl'] . '" frameborder="0" title="' . $list[ $i ]['videoTitle'] . '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 				$html .= '</div>';
 			}
@@ -257,12 +276,29 @@ class LearnDashFavorites {
 
 		$this->save_list( $list );
 	}
+
+	/**
+	 * Remove element from list
+	 *
+	 * @param $remove
+	 */
+	private function remove_from_favorite( $remove ) {
+		$list = $this->get_list();
+
+		foreach ( $list as $key => $val ) {
+			if ( $val['order'] == $remove ) {
+				unset($list[$key]);
+			}
+		}
+
+		$this->save_list( $list );
+	}
 }
 
 function init_lear_dash_favorites() {
 	return LearnDashFavorites::init();
 }
 
-if (!isset($_GET['tve'])) {
+if ( ! isset( $_GET['tve'] ) ) {
 	init_lear_dash_favorites();
 }

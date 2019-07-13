@@ -1,12 +1,14 @@
 .ldfavorites-content {
     max-width: 72%;
 }
+
 .ldfavorite-button:not(.active) {
     background-color: #DD8D8D !important;
     color: #FFF;
     border-color: #dd3333;
     border: 1px solid;
 }
+
 .ldfavorite-button.active {
     background-color: #dd3333 !important;
     color: #FFF;
@@ -53,9 +55,11 @@
 .ldfavorites-pagination a:hover:not(.active) {
     background-color: #ddd;
 }
+
 .ldfavorites-preloader {
     height: 10px;
 }
+
 @media screen and (max-width: 480px) {
 
     .ldfavorites-content {
@@ -63,13 +67,23 @@
     }
 
 }
+
 .ldfavorites-arrows {
     float: right;
     display: block;
 }
+
 .ldfavorites-arrow-top {
 
 }
+
 .ldfavorites-arrow-bottom {
 
+}
+.ldfavorites-remove img{
+    opacity: 0.4;
+    height: 28px;
+}
+.ldfavorites-remove img:hover{
+    opacity: 1;
 }
