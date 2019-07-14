@@ -185,18 +185,18 @@ class LearnDashFavorites {
 		for ( $i = ( $page - 1 ) * $this->limit; $i < $page * $this->limit; $i ++ ) {
 			if ( isset( $list[ $i ] ) ) {
 				$html .= '<div class="ldfavorites-block">';
-				$html .= '<h2><a href="' . $list[ $i ]['videoLink'] . '" target="_blank" >' . $list[ $i ]['videoTitle'] . '</a>';
+				$html .= '<h2><a href="' . $list[ $i ]['videoLink'] . '" target="_parent" >' . $list[ $i ]['videoTitle'] . '</a>';
 				$html .= '<div class="ldfavorites-arrows">';
 				$html .= '      <a href="' . esc_url( add_query_arg( [
 						'ldfpage' => $page,
 						'order'   => $list[ $i ]['order'],
 						'asc'     => 1
-					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-bottom.png', __FILE__ ) . '" class="ldfavorites-arrow-bottom" ></a>';
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-bt.png', __FILE__ ) . '" class="ldfavorites-arrow-bottom" ></a>';
 				$html .= '      <a href="' . esc_url( add_query_arg( [
 						'ldfpage' => $page,
 						'order'   => $list[ $i ]['order'],
 						'asc'     => 0
-					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-top.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-t.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
 
 				$html .= '<a href="' . esc_url( add_query_arg( [
 						'ldfpage' => $page,

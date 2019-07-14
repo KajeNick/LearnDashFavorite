@@ -3,16 +3,16 @@
 }
 
 .ldfavorite-button:not(.active) {
-    background-color: #DD8D8D !important;
-    color: #FFF;
-    border-color: #dd3333;
-    border: 1px solid;
+    background-color: #fff !important;
+    color: #999;
+    border-color: #999;
+    border: 2px solid;
 }
 
 .ldfavorite-button.active {
-    background-color: #dd3333 !important;
+    background-color: #555 !important;
     color: #FFF;
-    border-color: #dd3333;
+    border-color: #555;
     border: 1px solid;
 }
 
@@ -73,6 +73,10 @@
     display: block;
 }
 
+.ldfavorites-arrows a img {
+    height: 28px;
+}
+
 .ldfavorites-arrow-top {
 
 }
@@ -80,10 +84,15 @@
 .ldfavorites-arrow-bottom {
 
 }
-.ldfavorites-remove img{
-    opacity: 0.4;
-    height: 28px;
+
+.ldfavorites-remove {
+    margin-left: 5px;
 }
-.ldfavorites-remove img:hover{
+
+.ldfavorites-remove img {
+    opacity: 0.4;
+}
+
+.ldfavorites-remove img:hover {
     opacity: 1;
 }
