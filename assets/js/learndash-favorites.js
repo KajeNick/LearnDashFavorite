@@ -1,6 +1,4 @@
 jQuery(document).ready(function ($) {
-    addButtons();
-
     $('body').on('click', '.ldfavorite-button', function () {
         let that = $(this),
             data = {

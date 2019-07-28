@@ -42,6 +42,7 @@ class LearnDashFavorites {
 		add_action( 'wp_ajax_nopriv_add_favorite', [ $this, 'add_favorite_callback' ] );
 		add_shortcode( 'ldfavorites_list', [ $this, 'display_favorites_list' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'on_ob_start' ] );
+		add_shortcode( 'ldfbutton', [ $this, 'add_ldfavorites_button' ] );
 	}
 
 	/**
@@ -80,7 +81,7 @@ class LearnDashFavorites {
 				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
 				'security' => wp_create_nonce( $this->key ),
 				'list'     => $this->get_list(),
-				'preload'  => plugins_url( 'assets/img/preloader.svg', __FILE__ )
+				'preload'  => plugins_url( 'assets/img/prl.svg', __FILE__ )
 			]
 		);
 	}
@@ -191,12 +192,12 @@ class LearnDashFavorites {
 						'ldfpage' => $page,
 						'order'   => $list[ $i ]['order'],
 						'asc'     => 1
-					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-bt.png', __FILE__ ) . '" class="ldfavorites-arrow-bottom" ></a>';
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-bottom.png', __FILE__ ) . '" class="ldfavorites-arrow-bottom" ></a>';
 				$html .= '      <a href="' . esc_url( add_query_arg( [
 						'ldfpage' => $page,
 						'order'   => $list[ $i ]['order'],
 						'asc'     => 0
-					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-t.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
+					] ) ) . '"><img src="' . plugins_url( 'assets/img/arrow-top.png', __FILE__ ) . '" class="ldfavorites-arrow-top" ></a>';
 
 				$html .= '<a href="' . esc_url( add_query_arg( [
 						'ldfpage' => $page,
@@ -218,6 +219,38 @@ class LearnDashFavorites {
 		$html .= '</div>';
 
 		echo $html;
+	}
+
+	/**
+	 * Shortcode for display favorite button
+	 *
+	 * @param $attr
+	 */
+	function add_ldfavorites_button( $attr ) {
+		$video    = isset( $attr['video'] ) ? 'data-video_url="https://player.vimeo.com/video/' . $attr['video'] . '?portrait=0&title=0&color=fff&byline=0"' : null;
+		$title    = isset( $attr['title'] ) ? 'data-video_title="' . $attr['title'] . '"' : '';
+		$descript = isset( $attr['descript'] ) ? 'data-descript="' . $attr['descript'] . '"' : '';
+
+		if ( $video != null ) {
+			$active = false;
+
+			$favorites = $this->get_list();
+
+			foreach ( $favorites as $favorite ) {
+				if ( $favorite['videoUrl'] == 'https://player.vimeo.com/video/' . $attr['video'] . '?portrait=0&title=0&color=fff&byline=0' ) {
+					$active = true;
+				}
+			}
+
+			if ( $active ) {
+				return '<button class="ldfavorite-button active" ' . $video . ' ' . $title . ' ' . $descript . ' ><i class="fas fa-heart"></i> In den Favoriten</button>';
+			} else {
+				return '<button class="ldfavorite-button" ' . $video . ' ' . $title . ' ' . $descript . ' ><i class="fas fa-heart"></i> Zu den Favoriten</button>';
+			}
+
+		}
+
+		return '';
 	}
 
 	/**
@@ -287,7 +320,7 @@ class LearnDashFavorites {
 
 		foreach ( $list as $key => $val ) {
 			if ( $val['order'] == $remove ) {
-				unset($list[$key]);
+				unset( $list[ $key ] );
 			}
 		}
 
