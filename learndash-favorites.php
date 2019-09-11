@@ -75,7 +75,6 @@ class LearnDashFavorites {
 	 * @return void
 	 */
 	function add_favorite_script() {
-		wp_enqueue_script( 'font-awasome', 'https://kit.fontawesome.com/2dee5ce468.js' );
 		wp_enqueue_script( 'learndash-favorites-js', plugins_url( 'assets/js/learndash-favorites.js', __FILE__ ), array( 'jquery' ), time(), true );
 		wp_localize_script( 'learndash-favorites-js', 'ldFavorites',
 			[

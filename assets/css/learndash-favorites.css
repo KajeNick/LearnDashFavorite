@@ -96,3 +96,29 @@
 .ldfavorites-remove img:hover {
     opacity: 1;
 }
+
+.side-panel-menu-container .fa-heart:before {
+    display: none;
+}
+
+.side-panel-menu-container .fa-star:before {
+    display: none;
+}
+
+.side-panel-menu-container .fa-life-ring:before {
+    display: none;
+}
+
+.fa-heart:before {
+    content: " ";
+    display: inline-block;
+    background-image: url("../img/heart-grey.png");
+    width: 16px;
+    height: 16px;
+    position: inherit;
+    top: 3px;
+}
+
+.active .fa-heart:before {
+    background-image: url("../img/heart-white.png") !important;
+}
