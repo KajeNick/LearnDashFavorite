@@ -1,23 +1,37 @@
 .ldfavorites-content {
     max-width: 72%;
+
+    opacity: 1;
+    visibility: visible;
+
+    transition: visibility 0.5s linear, opacity 0.5s linear;
+    -moz-transition: visibility 0.5s linear, opacity 0.5s linear;
+    -ms-transition: visibility 0.5s linear, opacity 0.5s linear;
+    -o-transition: visibility 0.5s linear, opacity 0.5s linear;
+    -webkit-transition: visibility 0.5s linear, opacity 0.5s linear;
+}
+
+.ldfavorites-content_hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .ldfavorite-button:not(.active) {
     background-color: #fff !important;
     color: #999;
-    border-color: #999;
-    border: 2px solid;
+    border: 2px solid #999;
 }
 
 .ldfavorite-button.active {
     background-color: #555 !important;
     color: #FFF;
-    border-color: #555;
-    border: 1px solid;
+    border: 2px solid #555;
 }
 
 .ldfavorite-button {
     outline: none;
+    min-width: 186px;
+    min-height: 45px;
 }
 
 .ldfavorites-block {
@@ -58,6 +72,7 @@
 
 .ldfavorites-preloader {
     height: 10px;
+    vertical-align: middle !important;
 }
 
 @media screen and (max-width: 480px) {
@@ -97,7 +112,7 @@
     opacity: 1;
 }
 
-.side-panel-menu-container .fa-heart:before {
+.side-panel-menu-container .ld-fa-heart:before {
     display: none;
 }
 
@@ -109,7 +124,7 @@
     display: none;
 }
 
-.fa-heart:before {
+.ld-fa-heart:before {
     content: " ";
     display: inline-block;
     background-image: url("../img/heart-grey.png");
@@ -119,6 +134,10 @@
     top: 3px;
 }
 
-.active .fa-heart:before {
+.active .ld-fa-heart:before {
     background-image: url("../img/heart-white.png") !important;
+}
+
+.ldfavorites-block .fluid-width-video-wrapper {
+    position: relative !important;
 }

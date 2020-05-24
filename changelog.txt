@@ -1,0 +1,11 @@
+v1.0.2 -> May 24, 2020
+--------------------------
+* **[update]** Change favorite order by AJAX
+
+v1.0.1 -> Sep 11, 2019
+--------------------------
+* **[add]** Small fixes
+
+v1.0.0 -> Jun 01, 2019
+--------------------------
+* **[add]** Initial release

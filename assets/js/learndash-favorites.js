@@ -1,5 +1,8 @@
 jQuery(document).ready(function ($) {
-    $('body').on('click', '.ldfavorite-button', function () {
+
+    let body = $('body');
+
+    body.on('click', '.ldfavorite-button', function () {
         let that = $(this),
             data = {
                 action: 'add_favorite',
@@ -15,13 +18,48 @@ jQuery(document).ready(function ($) {
         $.post(ldFavorites.ajaxurl, data, function (answer) {
             if (answer.success) {
                 that.addClass('active');
-                that.html('<i class="fas fa-heart"></i> In den Favoriten');
+                that.html('<i class="_mi _before buddyboss bb-icon-heart-fill"></i> In den Favoriten');
             } else {
                 that.removeClass('active');
-                that.html('<i class="fas fa-heart"></i> Zu den Favoriten');
+                that.html('<i class="_mi _before buddyboss bb-icon-heart-fill"></i> Zu den Favoriten');
             }
         }, 'json');
     });
+
+    body.on('click', '.ldfavorites-arrow-top, .ldfavorites-arrow-bottom', function () {
+        let that = $(this),
+            contentBlock = that.closest('.ldfavorites-content'),
+            data = {
+                action: 'order_favorite',
+                security: ldFavorites.security,
+                order_type: 'asc',
+                order_position: that.data('order'),
+                page: ldFavorites.page,
+            };
+
+        if (that.hasClass('ldfavorites-arrow-top')) {
+            data.order_type = 'desc';
+        }
+
+        contentBlock.addClass('ldfavorites-content_hidden');
+        contentBlock.attr('style', 'height: ' + contentBlock.height() + 'px');
+
+        $.post(ldFavorites.ajaxurl, data, function (answer) {
+            if (answer.success) {
+                contentBlock.html(answer.html);
+            } else {
+                console.log('Some error, we can`t change position of that element');
+            }
+
+            setTimeout(function () {
+                contentBlock.removeClass('ldfavorites-content_hidden');
+            }, 300);
+
+        }, 'json');
+
+        return false;
+    });
+
 });
 
 /**
@@ -78,9 +116,9 @@ function addButtons() {
             }
 
             if (active) {
-                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + course_title + ' | ' + training_title + ' | ' + video_title + '" data-descript="' + video_descript + '" ><i class="fas fa-heart"></i> In den Favoriten</button>');
+                $(this).parent().after('<button class="ldfavorite-button active" data-video_url="' + video_url + '" data-video_title="' + course_title + ' | ' + training_title + ' | ' + video_title + '" data-descript="' + video_descript + '" ><i class="_mi _before buddyboss bb-icon-heart-fill"></i> In den Favoriten</button>');
             } else {
-                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + course_title + ' | ' + training_title + ' | ' + video_title + '"  data-descript="' + video_descript + '" ><i class="fas fa-heart"></i> Zu den Favoriten</button>');
+                $(this).parent().after('<button class="ldfavorite-button" data-video_url="' + video_url + '" data-video_title="' + course_title + ' | ' + training_title + ' | ' + video_title + '"  data-descript="' + video_descript + '" ><i class="_mi _before buddyboss bb-icon-heart-fill"></i> Zu den Favoriten</button>');
             }
         });
     }
